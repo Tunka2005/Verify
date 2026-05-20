@@ -86,11 +86,11 @@ function PhotoUploadZone({
         >
           {image ? (
             <div className="relative w-full h-52 border-3 border-foreground overflow-hidden bg-white">
-              <img src={image} alt="Uploaded photo" className="w-full h-full object-cover" />
+              <img src={image} alt="Оруулсан зураг" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 to-transparent" />
               <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-[#c6f135] px-2 py-1 border-2 border-foreground">
                 <CheckCircle className="w-4 h-4" strokeWidth={2.5} />
-                <span className="text-xs font-bold">Uploaded</span>
+                <span className="text-xs font-bold">Оруулсан</span>
               </div>
             </div>
           ) : (
@@ -103,13 +103,13 @@ function PhotoUploadZone({
                 <ImageIcon className="w-8 h-8" strokeWidth={2} />
               </motion.div>
               <p className="font-black text-lg mb-1 uppercase">
-                {isDragging ? 'Drop it!' : 'Upload Photo'}
+                {isDragging ? 'Энд тавина уу!' : 'Зураг оруулах'}
               </p>
               <p className="text-sm text-muted-foreground font-medium">
-                Drag & drop or click to browse
+                Чирж тавих эсвэл дарж сонгоно уу
               </p>
               <p className="text-xs text-muted-foreground mt-1">
-                Any photo or business card with a face
+                Нүүртэй зураг эсвэл бизнес карт байж болно
               </p>
             </div>
           )}
@@ -148,7 +148,7 @@ function SelfieCapture({
           setStreaming(true)
         }
       } catch {
-        if (!cancelled) setError('Could not access camera. Please allow camera access.')
+        if (!cancelled) setError('Камер нээж чадсангүй. Камер ашиглах зөвшөөрөл өгнө үү.')
       }
     }
 
@@ -200,7 +200,7 @@ function SelfieCapture({
         className="w-full mt-4 bg-[#4ecdc4] text-foreground hover:bg-[#3dbdb4] border-3 border-foreground shadow-[4px_4px_0px_var(--foreground)] font-bold uppercase tracking-wider py-5 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_var(--foreground)]"
       >
         <Camera className="w-5 h-5 mr-2" />
-        Take Selfie
+        Селфи авах
       </Button>
     </div>
   )
@@ -280,8 +280,8 @@ function ResultCard({
           transition={{ delay: 0.2 }}
         >
           {isMatch
-            ? <span className="text-[#c6f135]">FACE MATCHED!</span>
-            : <span className="text-[#ff6b6b]">NO MATCH</span>
+            ? <span className="text-[#c6f135]">НҮҮР ТААРЛАА!</span>
+            : <span className="text-[#ff6b6b]">ТААРСАНГҮЙ</span>
           }
         </motion.h2>
 
@@ -292,8 +292,8 @@ function ResultCard({
           transition={{ delay: 0.3 }}
         >
           {isMatch
-            ? `The faces appear to be the same person — ${confidence.toFixed(1)}% confidence`
-            : `The faces do not match. Minimum 55% required, got ${confidence.toFixed(1)}%`
+            ? `Нүүрүүд нэг хүнийх байх магадлалтай - итгэлцүүр ${confidence.toFixed(1)}%`
+            : `Нүүрүүд таарсангүй. Доод шаардлага 55%, харин ${confidence.toFixed(1)}% байна`
           }
         </motion.p>
       </div>
@@ -311,15 +311,15 @@ function ResultCard({
             <span className="w-7 h-7 bg-[#ff6b9d] border-2 border-foreground flex items-center justify-center">
               <Fingerprint className="w-4 h-4" />
             </span>
-            Match Confidence
+            Таарлын итгэлцүүр
           </h3>
           <div className="flex justify-center mb-4">
             <ConfidenceRing progress={confidence} />
           </div>
           <div className={`inline-flex items-center gap-2 px-3 py-1.5 font-bold text-sm uppercase tracking-wider border-2 border-foreground ${confidence >= 55 ? 'bg-[#c6f135]' : 'bg-[#ff6b6b] text-white'}`}>
             {confidence >= 55
-              ? <><CheckCircle className="w-4 h-4" /> Threshold passed (55%+)</>
-              : <><XCircle className="w-4 h-4" /> Below threshold (55%+)</>
+              ? <><CheckCircle className="w-4 h-4" /> Босго давсан (55%+)</>
+              : <><XCircle className="w-4 h-4" /> Босгоос доогуур (55%+)</>
             }
           </div>
         </motion.div>
@@ -335,17 +335,17 @@ function ResultCard({
             <span className="w-7 h-7 bg-[#4ecdc4] border-2 border-foreground flex items-center justify-center">
               <Shield className="w-4 h-4" />
             </span>
-            Verdict
+            Дүгнэлт
           </h3>
           <div className="space-y-4">
             <div className="pb-3 border-b-2 border-foreground/10">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">Result</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">Үр дүн</p>
               <p className={`text-xl font-black ${isMatch ? 'text-[#c6f135]' : 'text-[#ff6b6b]'}`}>
-                {isMatch ? 'SAME PERSON' : 'DIFFERENT PERSON'}
+                {isMatch ? 'НЭГ ХҮН' : 'ӨӨР ХҮН'}
               </p>
             </div>
             <div className="pb-3 border-b-2 border-foreground/10">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">Face Match Score</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">Нүүр таарлын оноо</p>
               <div className="h-3 bg-foreground/20 border-2 border-foreground overflow-hidden mt-2">
                 <motion.div
                   className={`h-full ${confidence >= 55 ? 'bg-[#c6f135]' : 'bg-[#ff6b6b]'}`}
@@ -357,8 +357,8 @@ function ResultCard({
               <p className="text-right text-sm font-mono font-bold mt-1">{confidence.toFixed(1)}%</p>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">Date</p>
-              <p className="text-sm font-mono">{new Date().toLocaleDateString()}</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">Огноо</p>
+              <p className="text-sm font-mono">{new Date().toLocaleDateString('mn-MN')}</p>
             </div>
           </div>
         </motion.div>
@@ -371,7 +371,7 @@ function ResultCard({
           className="w-full bg-foreground text-background hover:bg-foreground/80 border-3 border-foreground shadow-[4px_4px_0px_var(--foreground)] font-bold uppercase tracking-wider py-6 text-lg transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_var(--foreground)]"
         >
           <RefreshCw className="w-5 h-5 mr-2" />
-          Try Again
+          Дахин оролдох
         </Button>
       </motion.div>
     </motion.div>
@@ -404,7 +404,7 @@ export default function ImageCompareFlow({ onComplete }: ImageCompareFlowProps) 
 
   const handleCompare = async () => {
     if (!referenceImage || !selfieImage) {
-      setError('Please upload a photo and take a selfie first.')
+      setError('Эхлээд зураг оруулаад селфи авна уу.')
       return
     }
 
@@ -422,7 +422,7 @@ export default function ImageCompareFlow({ onComplete }: ImageCompareFlowProps) 
       onComplete?.(compareResult)
     } catch (err) {
       console.error('Face compare failed', err)
-      setError(err instanceof Error ? err.message : 'Face comparison failed. Make sure both images contain a visible face.')
+      setError(err instanceof Error ? err.message : 'Нүүр харьцуулалт амжилтгүй боллоо. Хоёр зурагт хоёуланд нь нүүр тод харагдаж байгаа эсэхийг шалгана уу.')
     } finally {
       setComparing(false)
     }
@@ -445,7 +445,7 @@ export default function ImageCompareFlow({ onComplete }: ImageCompareFlowProps) 
           className="inline-flex items-center gap-2 bg-background border-3 border-foreground px-4 py-2 font-bold text-sm uppercase tracking-wider shadow-[4px_4px_0px_var(--foreground)] hover:shadow-[2px_2px_0px_var(--foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back
+          Буцах
         </Link>
       </div>
 
@@ -464,13 +464,13 @@ export default function ImageCompareFlow({ onComplete }: ImageCompareFlowProps) 
             transition={{ type: 'spring', stiffness: 200 }}
           >
             <ImageIcon className="w-4 h-4" />
-            Photo Compare
+            Зураг харьцуулах
           </motion.span>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter mb-4">
-            COMPARE YOUR <span className="text-[#4ecdc4]">FACE</span>
+            <span className="text-[#4ecdc4]">НҮҮРЭЭ</span> ХАРЬЦУУЛАХ
           </h1>
           <p className="text-muted-foreground text-lg max-w-md mx-auto">
-            Upload a photo with a face, then take a selfie to compare
+            Нүүртэй зураг оруулаад селфи авч харьцуулна уу
           </p>
         </motion.div>
 
@@ -486,24 +486,24 @@ export default function ImageCompareFlow({ onComplete }: ImageCompareFlowProps) 
             </motion.div>
           ) : (
             <motion.div key={`upload-${retryKey}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              {/* Selfie tips — full width above both columns */}
+              {/* Selfie tips */}
               <div className="mb-4 bg-[#ffd93d] border-2 border-foreground px-3 py-2 text-xs font-bold flex flex-wrap gap-x-3 gap-y-1">
-                <span>Selfie tips:</span>
-                <span>Face the camera directly</span>
-                <span>· No glasses or sunglasses</span>
-                <span>· No mask or face covering</span>
-                <span>· No hat or cap</span>
-                <span>· No filters</span>
+                <span>Селфи зөвлөмж:</span>
+                <span>Камер руу эгц харах</span>
+                <span>- Нүдний шил, нарны шилгүй</span>
+                <span>- Маск, нүүр халхалсан зүйлгүй</span>
+                <span>- Малгайгүй</span>
+                <span>- Фильтергүй</span>
               </div>
               <div className="grid md:grid-cols-2 gap-6 mb-8">
                 {/* Reference photo */}
                 <motion.div variants={itemVariants}>
                   <div className="mb-3">
                     <span className="font-black uppercase tracking-wider text-sm">
-                      1. Upload Reference Photo
+                      1. Лавлах зураг оруулах
                     </span>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Business card, ID photo, or any image with a face
+                      Бизнес карт, үнэмлэхний зураг эсвэл нүүртэй дурын зураг
                     </p>
                   </div>
                   <PhotoUploadZone image={referenceImage} onUpload={handlePhotoUpload} />
@@ -512,7 +512,7 @@ export default function ImageCompareFlow({ onComplete }: ImageCompareFlowProps) 
                       onClick={() => setReferenceImage(null)}
                       className="mt-2 text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1"
                     >
-                      <X className="w-3 h-3" /> Remove
+                      <X className="w-3 h-3" /> Устгах
                     </button>
                   )}
                 </motion.div>
@@ -521,10 +521,10 @@ export default function ImageCompareFlow({ onComplete }: ImageCompareFlowProps) 
                 <motion.div variants={itemVariants}>
                   <div className="mb-3">
                     <span className="font-black uppercase tracking-wider text-sm">
-                      2. Take a Selfie
+                      2. Селфи авах
                     </span>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Look directly at the camera
+                      Камер руу эгц харна уу
                     </p>
                   </div>
                   {selfieImage ? (
@@ -535,7 +535,7 @@ export default function ImageCompareFlow({ onComplete }: ImageCompareFlowProps) 
                       >
                         <img
                           src={selfieImage}
-                          alt="Selfie"
+                          alt="Селфи"
                           className="w-full h-52 object-cover scale-x-[-1]"
                         />
                       </div>
@@ -543,7 +543,7 @@ export default function ImageCompareFlow({ onComplete }: ImageCompareFlowProps) 
                         onClick={() => setSelfieImage(null)}
                         className="mt-2 text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1"
                       >
-                        <RefreshCw className="w-3 h-3" /> Retake
+                        <RefreshCw className="w-3 h-3" /> Дахин авах
                       </button>
                     </div>
                   ) : (
@@ -578,12 +578,12 @@ export default function ImageCompareFlow({ onComplete }: ImageCompareFlowProps) 
                     {comparing ? (
                       <>
                         <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                        Comparing Faces...
+                        Нүүрүүдийг харьцуулж байна...
                       </>
                     ) : (
                       <>
                         <Camera className="w-5 h-5 mr-2" />
-                        Compare Faces
+                        Нүүр харьцуулах
                         <ArrowRight className="w-5 h-5 ml-2" />
                       </>
                     )}

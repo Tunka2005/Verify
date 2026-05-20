@@ -94,7 +94,7 @@ export default function ChooseMethodPage() {
                     <ImageIcon className="w-6 h-6 md:w-7 md:h-7 text-background" strokeWidth={2} />
                   </div>
                   <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight mb-2">
-                    Photo Compare
+                    Зураг харьцуулах
                   </h2>
                   <p className="text-sm font-medium text-foreground/70 mb-5 leading-relaxed">
                     Нүүр зурагтай ямар нэг зураг эсвэл бизнесийн карт оруулж, selfie-тэйгээ харьцуулна уу.
