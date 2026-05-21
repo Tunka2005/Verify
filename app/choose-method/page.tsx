@@ -18,6 +18,16 @@ export default function ChooseMethodPage() {
     <main className="min-h-screen bg-background">
       <div className="fixed inset-0 grid-pattern pointer-events-none opacity-30" />
 
+      <div className="fixed top-4 left-4 z-50">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 bg-background border-3 border-foreground px-4 py-2 font-bold text-sm uppercase tracking-wider shadow-[4px_4px_0px_var(--foreground)] hover:shadow-[2px_2px_0px_var(--foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Буцах
+        </Link>
+      </div>
+
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-10">
         <div className="max-w-2xl w-full">
           {/* Header */}
@@ -118,21 +128,6 @@ export default function ChooseMethodPage() {
             </motion.div>
           </div>
 
-          {/* Back link */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="text-center"
-          >
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground transition-colors uppercase tracking-wider"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Нүүр хуудас руу буцах
-            </Link>
-          </motion.div>
         </div>
       </div>
     </main>
