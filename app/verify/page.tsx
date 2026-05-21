@@ -78,7 +78,7 @@ export default function VerifyPage() {
               className="inline-flex items-center gap-2 bg-background border-3 border-foreground px-4 py-2 font-bold text-sm uppercase tracking-wider shadow-[4px_4px_0px_var(--foreground)] hover:shadow-[2px_2px_0px_var(--foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back
+              Буцах
             </Link>
           ) : (
             <button
@@ -86,7 +86,7 @@ export default function VerifyPage() {
               className="inline-flex items-center gap-2 bg-background border-3 border-foreground px-4 py-2 font-bold text-sm uppercase tracking-wider shadow-[4px_4px_0px_var(--foreground)] hover:shadow-[2px_2px_0px_var(--foreground)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back
+              Буцах
             </button>
           )}
         </div>

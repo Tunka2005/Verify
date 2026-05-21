@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VERIFY — Нүүр Таних Систем</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Space+Grotesk:wght@400;700;800&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --white: #f8f8f0;
+      --lime: #c6f135;
+      --teal: #4ecdc4;
+      --blue: #3b82f6;
+      --pink: #ff6b9d;
+      --red: #ff6b6b;
+      --yellow: #ffd93d;
+      --border: 3px solid var(--black);
+      --shadow: 6px 6px 0px var(--black);
+      --shadow-sm: 4px 4px 0px var(--black);
+    }
+
+    body {
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      background: var(--black);
+      color: var(--black);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      padding: 48px 64px;
+      background: var(--white);
+      overflow: hidden;
+    }
+
+    .slide.active { display: flex; }
+
+    /* Grid background */
+    .slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(var(--black) 1px, transparent 1px),
+                        linear-gradient(90deg, var(--black) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.04;
+      pointer-events: none;
+    }
+
+    /* ===== SHARED ===== */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    h1 {
+      font-size: clamp(52px, 7vw, 96px);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    p { font-size: 17px; line-height: 1.6; font-weight: 500; }
+
+    .accent-blue  { color: var(--blue); }
+    .accent-teal  { color: var(--teal); }
+    .accent-lime  { color: var(--lime); }
+    .accent-pink  { color: var(--pink); }
+    .accent-red   { color: var(--red); }
+
+    .box {
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 24px 28px;
+    }
+
+    /* ===== SLIDE 1 — TITLE ===== */
+    #s1 { background: var(--white); justify-content: space-between; }
+    #s1 .top-row { display: flex; justify-content: space-between; align-items: flex-start; }
+    #s1 .logo-box {
+      background: var(--blue);
+      color: var(--white);
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      border: var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    #s1 .year-tag { background: var(--lime); }
+    #s1 .main-title { margin: 40px 0 24px; }
+    #s1 .main-title h1 span { display: block; }
+    #s1 .main-title h1 .line-blue  { color: var(--blue); }
+    #s1 .main-title h1 .line-teal  { color: var(--teal); }
+    #s1 .subtitle {
+      max-width: 520px;
+      font-size: 18px;
+      color: #555;
+      font-weight: 500;
+      margin-bottom: 36px;
+    }
+    #s1 .pills { display: flex; gap: 12px; flex-wrap: wrap; }
+    #s1 .pill {
+      padding: 8px 16px;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    #s1 .decorations { position: absolute; right: 64px; top: 50%; transform: translateY(-50%); }
+    #s1 .big-circle {
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: var(--blue);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white);
+      font-size: 80px;
+      font-weight: 900;
+    }
+    #s1 .float-box {
+      position: absolute;
+      border: var(--border);
+      box-shadow: var(--shadow-sm);
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+    }
+    #s1 .fb1 { top: -40px; right: -20px; background: var(--lime); }
+    #s1 .fb2 { bottom: -50px; left: 20px; background: var(--teal); }
+
+    /* ===== SLIDE 2 — PROBLEM ===== */
+    #s2 { background: var(--black); color: var(--white); }
+    #s2::before { opacity: 0.08; }
+    #s2 h2 { color: var(--white); margin-bottom: 48px; }
+    #s2 h2 span { color: var(--red); }
+    #s2 .problems { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; flex: 1; }
+    #s2 .problem-card {
+      border: 2px solid rgba(255,255,255,0.2);
+      padding: 28px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    #s2 .problem-card .num {
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--red);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+    #s2 .problem-card h3 { color: var(--white); font-size: 18px; }
+    #s2 .problem-card p { color: rgba(255,255,255,0.6); font-size: 15px; }
+
+    /* ===== SLIDE 3 — SOLUTION ===== */
+    #s3 { background: var(--lime); }
+    #s3 .header { margin-bottom: 40px; }
+    #s3 .header .tag { background: var(--black); color: var(--white); margin-bottom: 16px; }
+    #s3 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; flex: 1; }
+    #s3 .card {
+      background: var(--white);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    #s3 .card .icon {
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      border: var(--border);
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+    #s3 .card h3 { font-size: 16px; }
+    #s3 .card p { font-size: 14px; color: #555; line-height: 1.5; }
+
+    /* ===== SLIDE 4 — TECH STACK ===== */
+    #s4 { background: var(--white); }
+    #s4 .content { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; flex: 1; margin-top: 32px; }
+    #s4 .stack-col { display: flex; flex-direction: column; gap: 16px; }
+    #s4 .stack-col .col-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      border: var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    #s4 .tech-item {
+      border: var(--border);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    #s4 .tech-item .dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    #s4 .tech-item .name { font-weight: 800; font-size: 15px; }
+    #s4 .tech-item .desc { font-size: 13px; color: #666; font-weight: 500; }
+
+    /* ===== SLIDE 5 — HOW IT WORKS ===== */
+    #s5 { background: var(--teal); }
+    #s5 .header .tag { background: var(--black); color: var(--white); margin-bottom: 16px; }
+    #s5 .flow { display: flex; align-items: stretch; gap: 0; flex: 1; margin-top: 32px; }
+    #s5 .step {
+      flex: 1;
+      background: var(--white);
+      border: var(--border);
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-right: -3px;
+    }
+    #s5 .step:last-child { margin-right: 0; }
+    #s5 .step .num {
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+    #s5 .step h3 { font-size: 15px; }
+    #s5 .step p { font-size: 13px; color: #555; line-height: 1.5; }
+    #s5 .step.active-step { background: var(--black); color: var(--white); z-index: 1; }
+    #s5 .step.active-step p { color: rgba(255,255,255,0.6); }
+
+    /* ===== SLIDE 6 — ARCHITECTURE ===== */
+    #s6 { background: var(--white); }
+    #s6 .arch { flex: 1; margin-top: 32px; display: flex; gap: 32px; align-items: stretch; }
+    #s6 .arch-col { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+    #s6 .arch-col .col-header {
+      padding: 14px 20px;
+      border: var(--border);
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 8px;
+    }
+    #s6 .arch-item {
+      border: var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    #s6 .arch-item .label { font-weight: 700; font-size: 14px; }
+    #s6 .arch-item .sub { font-size: 12px; color: #666; font-weight: 500; }
+    #s6 .arrow-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 8px;
+    }
+    #s6 .arrow-col .arrow-line {
+      width: 2px;
+      flex: 1;
+      background: var(--black);
+    }
+    #s6 .arrow-col .arrow-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      writing-mode: vertical-rl;
+      padding: 8px 4px;
+      background: var(--yellow);
+      border: var(--border);
+    }
+
+    /* ===== SLIDE 7 — FEATURES ===== */
+    #s7 { background: var(--blue); color: var(--white); }
+    #s7::before { opacity: 0.06; }
+    #s7 h2 { color: var(--white); margin-bottom: 40px; }
+    #s7 h2 span { color: var(--lime); }
+    #s7 .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; flex: 1; }
+    #s7 .feat {
+      border: 2px solid rgba(255,255,255,0.3);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    #s7 .feat .icon-box {
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      border: 2px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.1);
+    }
+    #s7 .feat h3 { color: var(--white); font-size: 15px; }
+    #s7 .feat p { color: rgba(255,255,255,0.65); font-size: 13px; line-height: 1.5; }
+
+    /* ===== SLIDE 8 — DEMO ===== */
+    #s8 { background: var(--white); }
+    #s8 .demo-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 32px; }
+    #s8 .screen {
+      border: var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    #s8 .screen .screen-bar {
+      background: var(--black);
+      color: var(--white);
+      padding: 10px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #s8 .screen .screen-bar .dot { width: 8px; height: 8px; border-radius: 50%; }
+    #s8 .screen .screen-body {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 200px;
+    }
+    #s8 .mock-btn {
+      padding: 10px 16px;
+      border: var(--border);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    #s8 .mock-img {
+      flex: 1;
+      border: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      background: #f0f0f0;
+    }
+    #s8 .mock-badge {
+      padding: 6px 12px;
+      border: var(--border);
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: inline-block;
+    }
+
+    /* ===== SLIDE 9 — RESULTS ===== */
+    #s9 { background: var(--black); color: var(--white); }
+    #s9::before { opacity: 0.08; }
+    #s9 h2 { color: var(--white); margin-bottom: 40px; }
+    #s9 h2 span { color: var(--lime); }
+    #s9 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 32px; }
+    #s9 .stat {
+      border: 2px solid rgba(255,255,255,0.2);
+      padding: 28px 20px;
+      text-align: center;
+    }
+    #s9 .stat .num {
+      font-size: 52px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    #s9 .stat .label { font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    #s9 .results-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    #s9 .result-item {
+      border: 2px solid rgba(255,255,255,0.2);
+      padding: 20px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    #s9 .result-item .check {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--lime);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--black);
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    #s9 .result-item h3 { color: var(--white); font-size: 15px; margin-bottom: 4px; }
+    #s9 .result-item p { color: rgba(255,255,255,0.55); font-size: 13px; }
+
+    /* ===== SLIDE 10 — CONCLUSION ===== */
+    #s10 { background: var(--lime); justify-content: center; align-items: center; text-align: center; }
+    #s10 .center-content { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+    #s10 .big-logo {
+      width: 120px; height: 120px;
+      background: var(--black);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--lime);
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+    #s10 h2 { font-size: 64px; letter-spacing: -0.04em; }
+    #s10 .sub { font-size: 20px; max-width: 480px; color: #333; font-weight: 500; }
+    #s10 .tech-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+    #s10 .tech-pill {
+      padding: 10px 20px;
+      background: var(--black);
+      color: var(--white);
+      border: var(--border);
+      box-shadow: var(--shadow-sm);
+      font-weight: 800;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    #s10 .qr-placeholder {
+      width: 100px; height: 100px;
+      border: var(--border);
+      box-shadow: var(--shadow-sm);
+      display: flex; align-items: center; justify-content: center;
+      background: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      color: #666;
+      text-align: center;
+      padding: 8px;
+    }
+    #s10 .bottom-row { display: flex; gap: 24px; align-items: center; }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--black);
+      padding: 5px 12px;
+      border: 2px solid rgba(255,255,255,0.2);
+      z-index: 100;
+    }
+
+    .nav button {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--white);
+      padding: 4px 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .nav button:hover { background: rgba(255,255,255,0.1); }
+
+    .nav .counter {
+      color: rgba(255,255,255,0.6);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      min-width: 44px;
+      text-align: center;
+    }
+
+    .nav .dots { display: flex; gap: 5px; }
+    .nav .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav .dot.on { background: var(--lime); }
+
+    /* ===== SLIDE NUMBER ===== */
+    .slide-num {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      opacity: 0.35;
+      text-transform: uppercase;
+    }
+
+    /* keyboard hint */
+    .hint {
+      position: fixed;
+      bottom: 24px;
+      right: 32px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- SLIDE 1: TITLE -->
+  <section class="slide active" id="s1">
+    <div class="slide-num">01 / 10</div>
+    <div class="top-row">
+      <div class="logo-box">VERIFY SYSTEM</div>
+      <div class="tag year-tag">2025 · БҮЛЭГ ТӨСӨЛ</div>
+    </div>
+    <div class="main-title">
+      <h1>
+        <span>НҮҮР</span>
+        <span class="line-blue">ТАНИХ</span>
+        <span class="line-teal">СИСТЕМ</span>
+      </h1>
+    </div>
+    <p class="subtitle">
+      Иргэний үнэмлэхийн баталгаажуулалт болон нүүр харьцуулалтын AI систем.
+      Next.js + FastAPI + face_recognition.
+    </p>
+    <div class="pills">
+      <div class="pill" style="background:var(--blue);color:#fff">AI · Нүүр Таних</div>
+      <div class="pill" style="background:var(--teal)">FastAPI · Python</div>
+      <div class="pill" style="background:var(--lime)">Next.js · TypeScript</div>
+      <div class="pill" style="background:var(--yellow)">Railway Deploy</div>
+    </div>
+    <div class="decorations">
+      <div style="position:relative; width:280px; height:280px;">
+        <div class="big-circle">V</div>
+        <div class="float-box fb1">AI-POWERED</div>
+        <div class="float-box fb2">99.7% НАРИЙВЧЛАЛ</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: PROBLEM -->
+  <section class="slide" id="s2">
+    <div class="slide-num" style="color:#fff">02 / 10</div>
+    <h2>АСУУДАЛ <span>ЮУНД?</span></h2>
+    <div class="problems">
+      <div class="problem-card">
+        <div class="num">01</div>
+        <h3>Гар аргаар баталгаажуулалт</h3>
+        <p>Иргэний үнэмлэх шалгах үйл явц удаан, алдаатай, хүний хүчин зүйлээс хамаардаг.</p>
+      </div>
+      <div class="problem-card">
+        <div class="num">02</div>
+        <h3>Хуурамч баримт бичиг</h3>
+        <p>Хуурамч үнэмлэх, бусдын зургаар нэвтрэх гэх мэт залилан улам бүр нэмэгдэж байна.</p>
+      </div>
+      <div class="problem-card">
+        <div class="num">03</div>
+        <h3>Хугацаа их зарцуулдаг</h3>
+        <p>Банк, байгууллагуудад биечлэн ирж баталгаажуулах нь цаг хугацаа ихтэй шаарддаг.</p>
+      </div>
+      <div class="problem-card">
+        <div class="num">04</div>
+        <h3>Технологийн дутмаг</h3>
+        <p>Монголд нүүр таних, биометрик баталгаажуулалтын тохиромжтой платформ байхгүй.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: SOLUTION -->
+  <section class="slide" id="s3">
+    <div class="slide-num">03 / 10</div>
+    <div class="header">
+      <div class="tag">Шийдэл</div>
+      <h2>VERIFY ЮУ ХИЙДЭГ ВЭ?</h2>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="icon" style="background:var(--blue);color:#fff">🪪</div>
+        <h3>ID Баталгаажуулалт</h3>
+        <p>Монгол иргэний үнэмлэхийн урд болон арын зургийг AI-аар уншиж, OCR технологиор мэдээлэл гаргана.</p>
+      </div>
+      <div class="card">
+        <div class="icon" style="background:var(--teal)">🤳</div>
+        <h3>Нүүр Тааруулалт</h3>
+        <p>Үнэмлэх дээрх зургийг хэрэглэгчийн селфитэй харьцуулж, 55%+ итгэлцүүрийг шалгана.</p>
+      </div>
+      <div class="card">
+        <div class="icon" style="background:var(--lime)">🔍</div>
+        <h3>Зураг Харьцуулалт</h3>
+        <p>Дурын нүүр зургийг камераар авсан зурагтай харьцуулах бие даасан горим.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: TECH STACK -->
+  <section class="slide" id="s4">
+    <div class="slide-num">04 / 10</div>
+    <h2>ТЕХНОЛОГИЙН <span class="accent-blue">СТЭК</span></h2>
+    <div class="content">
+      <div class="stack-col">
+        <div class="col-title" style="background:var(--blue);color:#fff">
+          ⚡ FRONTEND
+        </div>
+        <div class="tech-item">
+          <div class="dot" style="background:var(--black)"></div>
+          <div>
+            <div class="name">Next.js 15 + React 19</div>
+            <div class="desc">App Router, SSR, TypeScript</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="dot" style="background:var(--blue)"></div>
+          <div>
+            <div class="name">Tailwind CSS v4</div>
+            <div class="desc">Neo-brutalist UI загвар</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="dot" style="background:var(--pink)"></div>
+          <div>
+            <div class="name">Framer Motion</div>
+            <div class="desc">Анимэйшн, хөдөлгөөн</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="dot" style="background:var(--teal)"></div>
+          <div>
+            <div class="name">shadcn/ui + Radix</div>
+            <div class="desc">Хэрэглэгчийн интерфейс компонент</div>
+          </div>
+        </div>
+      </div>
+      <div class="stack-col">
+        <div class="col-title" style="background:var(--teal)">
+          🐍 BACKEND
+        </div>
+        <div class="tech-item">
+          <div class="dot" style="background:var(--teal)"></div>
+          <div>
+            <div class="name">FastAPI + Python 3.11</div>
+            <div class="desc">Async REST API, Swagger UI</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="dot" style="background:var(--red)"></div>
+          <div>
+            <div class="name">face_recognition + dlib</div>
+            <div class="desc">128-dimension face encoding</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="dot" style="background:var(--yellow)"></div>
+          <div>
+            <div class="name">OpenCV + Pillow</div>
+            <div class="desc">Зображение боловсруулалт</div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="dot" style="background:var(--lime)"></div>
+          <div>
+            <div class="name">Railway + Nixpacks</div>
+            <div class="desc">Docker + Cloud Deployment</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: HOW IT WORKS -->
+  <section class="slide" id="s5">
+    <div class="slide-num">05 / 10</div>
+    <div class="header">
+      <div class="tag">Үйл явц</div>
+      <h2>ХЭРХЭН АЖИЛЛАДАГ ВЭ?</h2>
+    </div>
+    <div class="flow">
+      <div class="step">
+        <div class="num" style="color:var(--blue)">01</div>
+        <h3>Зураг Оруулах</h3>
+        <p>Хэрэглэгч үнэмлэхийн урд/арын зургийг эсвэл нүүртэй зургаа оруулна.</p>
+      </div>
+      <div class="step active-step">
+        <div class="num" style="color:var(--lime)">02</div>
+        <h3>AI Боловсруулалт</h3>
+        <p>Backend дээр face_recognition сан нүүр илрүүлж, 128 хэмжээст вектор үүсгэнэ.</p>
+      </div>
+      <div class="step">
+        <div class="num" style="color:var(--teal)">03</div>
+        <h3>Селфи Авах</h3>
+        <p>Хэрэглэгч камераар өөрийн нүүрний зургийг авна.</p>
+      </div>
+      <div class="step active-step">
+        <div class="num" style="color:var(--lime)">04</div>
+        <h3>Харьцуулалт</h3>
+        <p>Хоёр нүүрний вектор хоорондын зайг тооцоолж, таарах хувийг гаргана.</p>
+      </div>
+      <div class="step">
+        <div class="num" style="color:var(--pink)">05</div>
+        <h3>Үр Дүн</h3>
+        <p>55%+ итгэлцүүртэй бол "Нэг хүн", үгүй бол "Өөр хүн" гэж дүгнэнэ.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: ARCHITECTURE -->
+  <section class="slide" id="s6">
+    <div class="slide-num">06 / 10</div>
+    <h2>АРХИТЕКТУР</h2>
+    <div class="arch">
+      <div class="arch-col">
+        <div class="arch-col col-header" style="background:var(--blue);color:#fff">
+          🌐 FRONTEND — Railway
+        </div>
+        <div class="arch-item">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--blue);flex-shrink:0"></div>
+          <div><div class="label">Next.js App</div><div class="sub">/ нүүр хуудас</div></div>
+        </div>
+        <div class="arch-item">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--blue);flex-shrink:0"></div>
+          <div><div class="label">/choose-method</div><div class="sub">Арга сонгох хуудас</div></div>
+        </div>
+        <div class="arch-item">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--blue);flex-shrink:0"></div>
+          <div><div class="label">/verify</div><div class="sub">ID + Нүүр баталгаажуулалт</div></div>
+        </div>
+        <div class="arch-item">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--blue);flex-shrink:0"></div>
+          <div><div class="label">/compare</div><div class="sub">Зураг харьцуулалт</div></div>
+        </div>
+        <div class="arch-item" style="background:var(--lime)">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--black);flex-shrink:0"></div>
+          <div><div class="label">API Routes</div><div class="sub">Proxy → Backend</div></div>
+        </div>
+      </div>
+
+      <div class="arrow-col">
+        <div class="arrow-line"></div>
+        <div class="arrow-label">HTTPS · JSON · API KEY</div>
+        <div class="arrow-line"></div>
+      </div>
+
+      <div class="arch-col">
+        <div class="arch-col col-header" style="background:var(--teal)">
+          🐍 BACKEND — Railway
+        </div>
+        <div class="arch-item">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--teal);flex-shrink:0"></div>
+          <div><div class="label">FastAPI Server</div><div class="sub">uvicorn, port ${PORT}</div></div>
+        </div>
+        <div class="arch-item">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--teal);flex-shrink:0"></div>
+          <div><div class="label">POST /api/face-match</div><div class="sub">File upload харьцуулалт</div></div>
+        </div>
+        <div class="arch-item">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--teal);flex-shrink:0"></div>
+          <div><div class="label">POST /verify/face-match</div><div class="sub">Base64 зураг харьцуулалт</div></div>
+        </div>
+        <div class="arch-item">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--teal);flex-shrink:0"></div>
+          <div><div class="label">POST /verify/extract-document</div><div class="sub">Баримт OCR</div></div>
+        </div>
+        <div class="arch-item" style="background:var(--yellow)">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--black);flex-shrink:0"></div>
+          <div><div class="label">CORS + API Key Auth</div><div class="sub">Аюулгүй байдал</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: FEATURES -->
+  <section class="slide" id="s7">
+    <div class="slide-num" style="color:#fff">07 / 10</div>
+    <h2>ГОЛ <span>ОНЦЛОГУУД</span></h2>
+    <div class="features">
+      <div class="feat">
+        <div class="icon-box">🪪</div>
+        <h3>ID Карт OCR</h3>
+        <p>Монгол үнэмлэхийн нэр, огноо, дугаарыг автоматаар уншдаг.</p>
+      </div>
+      <div class="feat">
+        <div class="icon-box">👤</div>
+        <h3>Нүүр Таних</h3>
+        <p>128-dimension encoding ашиглан нүүр тааруулалт хийдэг.</p>
+      </div>
+      <div class="feat">
+        <div class="icon-box">📷</div>
+        <h3>Камер Интеграц</h3>
+        <p>WebRTC ашиглан хөтчийн камераас шууд зураг авдаг.</p>
+      </div>
+      <div class="feat">
+        <div class="icon-box">🔒</div>
+        <h3>API Key Аюулгүй байдал</h3>
+        <p>Header-д API key шаардаж, зөвшөөрөлгүй хандалтыг хориглодог.</p>
+      </div>
+      <div class="feat">
+        <div class="icon-box">📊</div>
+        <h3>Итгэлцүүр Харуулалт</h3>
+        <p>Нүүр таарах хувийг дугуй график болон progress bar-аар харуулдаг.</p>
+      </div>
+      <div class="feat">
+        <div class="icon-box">☁️</div>
+        <h3>Cloud Deploy</h3>
+        <p>Railway дээр frontend + backend тусдаа service байдлаар ажилладаг.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 8: DEMO SCREENS -->
+  <section class="slide" id="s8">
+    <div class="slide-num">08 / 10</div>
+    <h2>ИНТЕРФЕЙС <span class="accent-blue">ХАРАГДАЦ</span></h2>
+    <div class="demo-grid">
+      <div class="screen">
+        <div class="screen-bar">
+          <div class="dot" style="background:#ff6b6b"></div>
+          <div class="dot" style="background:var(--yellow)"></div>
+          <div class="dot" style="background:var(--lime)"></div>
+          &nbsp; НҮҮР ХУУДАС
+        </div>
+        <div class="screen-body">
+          <div style="font-size:24px;font-weight:900;letter-spacing:-0.04em;line-height:1.1">
+            НҮҮР<br>
+            <span style="color:var(--blue)">ТАНИХ</span><br>
+            <span style="color:var(--teal)">СИСТЕМ</span>
+          </div>
+          <div style="font-size:11px;color:#777;margin-top:4px">AI-тэй баталгаажуулалт</div>
+          <div class="mock-btn" style="background:var(--blue);color:#fff;margin-top:auto">БАТАЛГААЖУУЛАХ →</div>
+          <div class="mock-btn">БАРИМТ БИЧИГ</div>
+        </div>
+      </div>
+      <div class="screen">
+        <div class="screen-bar">
+          <div class="dot" style="background:#ff6b6b"></div>
+          <div class="dot" style="background:var(--yellow)"></div>
+          <div class="dot" style="background:var(--lime)"></div>
+          &nbsp; АРГА СОНГОХ
+        </div>
+        <div class="screen-body">
+          <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">АРГАА СОНГОНО УУ</div>
+          <div style="background:var(--lime);border:2px solid #000;padding:12px;margin-bottom:8px">
+            <div style="font-weight:800;font-size:13px">ИД КАРТ</div>
+            <div style="font-size:11px;color:#333;margin-top:4px">OCR + Нүүр тааруулалт</div>
+          </div>
+          <div style="background:var(--teal);border:2px solid #000;padding:12px">
+            <div style="font-weight:800;font-size:13px">ЗУРАГ ХАРЬЦУУЛАХ</div>
+            <div style="font-size:11px;color:#333;margin-top:4px">Зураг + Селфи</div>
+          </div>
+        </div>
+      </div>
+      <div class="screen">
+        <div class="screen-bar">
+          <div class="dot" style="background:#ff6b6b"></div>
+          <div class="dot" style="background:var(--yellow)"></div>
+          <div class="dot" style="background:var(--lime)"></div>
+          &nbsp; ҮР ДҮН
+        </div>
+        <div class="screen-body" style="align-items:center;justify-content:center;text-align:center;gap:8px">
+          <div style="width:64px;height:64px;background:var(--lime);border:2px solid #000;display:flex;align-items:center;justify-content:center;font-size:28px">✓</div>
+          <div style="font-size:18px;font-weight:900;letter-spacing:-0.03em;color:var(--blue)">НҮҮР ТААРЛАА!</div>
+          <div class="mock-badge" style="background:var(--lime)">87.5% ИТГЭЛЦҮҮР</div>
+          <div style="width:100%;height:8px;background:#f0f0f0;border:1px solid #000;margin-top:4px">
+            <div style="width:87%;height:100%;background:var(--lime)"></div>
+          </div>
+          <div class="mock-btn" style="width:100%;margin-top:4px">ДАХИН ОРОЛДОХ</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 9: RESULTS -->
+  <section class="slide" id="s9">
+    <div class="slide-num" style="color:#fff">09 / 10</div>
+    <h2>ҮР ДҮН <span>&</span> ОНЦЛОГ</h2>
+    <div class="stats">
+      <div class="stat">
+        <div class="num" style="color:var(--lime)">2</div>
+        <div class="label">Railway<br>Сервис</div>
+      </div>
+      <div class="stat">
+        <div class="num" style="color:var(--teal)">55%</div>
+        <div class="label">Хамгийн доод<br>Итгэлцүүр</div>
+      </div>
+      <div class="stat">
+        <div class="num" style="color:var(--pink)">128</div>
+        <div class="label">Нүүрний<br>Вектор хэмжээ</div>
+      </div>
+      <div class="stat">
+        <div class="num" style="color:var(--yellow)">3</div>
+        <div class="label">Хэрэглэгчийн<br>Горим</div>
+      </div>
+    </div>
+    <div class="results-row">
+      <div class="result-item">
+        <div class="check">✓</div>
+        <div>
+          <h3>Full-stack Web App</h3>
+          <p>Next.js frontend + FastAPI backend тусдаа deploy хийсэн.</p>
+        </div>
+      </div>
+      <div class="result-item">
+        <div class="check">✓</div>
+        <div>
+          <h3>Бодит AI Интеграц</h3>
+          <p>face_recognition сан ашиглан жинхэнэ нүүр таних хийдэг.</p>
+        </div>
+      </div>
+      <div class="result-item">
+        <div class="check">✓</div>
+        <div>
+          <h3>Аюулгүй API</h3>
+          <p>CORS, API Key authentication, restart policy тохируулсан.</p>
+        </div>
+      </div>
+      <div class="result-item">
+        <div class="check">✓</div>
+        <div>
+          <h3>Монгол Хэрэглэгч</h3>
+          <p>Бүх UI монгол хэлэнд орчуулагдсан, монгол иргэний үнэмлэхэд тохиромжтой.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 10: CONCLUSION -->
+  <section class="slide" id="s10">
+    <div class="slide-num">10 / 10</div>
+    <div class="center-content">
+      <div class="big-logo">V</div>
+      <h2>БАЯРЛАЛАА!</h2>
+      <p class="sub">VERIFY — Монголын анхны нүүр таних баталгаажуулалтын систем</p>
+      <div class="tech-row">
+        <div class="tech-pill">Next.js 15</div>
+        <div class="tech-pill">FastAPI</div>
+        <div class="tech-pill">face_recognition</div>
+        <div class="tech-pill">Railway</div>
+        <div class="tech-pill">TypeScript</div>
+      </div>
+      <div class="bottom-row" style="margin-top:8px">
+        <div style="text-align:left">
+          <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Асуулт байна уу?</div>
+          <div style="font-size:14px;color:#444;font-weight:500">GitHub · Railway · Swagger UI<br>дээр туршиж үзэх боломжтой</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button onclick="go(-1)">← Өмнөх</button>
+  <div class="dots" id="dots"></div>
+  <span class="counter" id="counter">1 / 10</span>
+  <button onclick="go(1)">Дараах →</button>
+</nav>
+
+<div class="hint">← → товч ашиглана уу</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dotsEl = document.getElementById('dots');
+  const counter = document.getElementById('counter');
+  let cur = 0;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' on' : '');
+    d.onclick = () => jump(i);
+    dotsEl.appendChild(d);
+  });
+
+  function jump(n) {
+    slides[cur].classList.remove('active');
+    dotsEl.children[cur].classList.remove('on');
+    cur = Math.max(0, Math.min(n, slides.length - 1));
+    slides[cur].classList.add('active');
+    dotsEl.children[cur].classList.add('on');
+    counter.textContent = `${cur + 1} / ${slides.length}`;
+  }
+
+  function go(dir) { jump(cur + dir); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') go(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp') go(-1);
+  });
+</script>
+</body>
+</html>
